@@ -131,13 +131,13 @@ It should be localed in the root folder on one of the drives of the target compu
 
 A sample backup file is below:
     
-    ```
-    # This is a comment, and is ignored
-		4c4c4544-0054-3610-804a-c7c04f444b33
-		7B0DFCE74B228860
-		-q2 -j2 -nogui -z1p -i 2000000 -p poweroff savedisk xps15dev_system
-		D2DE19FADE19D815
-    ```
+```
+# This is a comment, and is ignored
+4c4c4544-0054-3610-804a-c7c04f444b33
+7B0DFCE74B228860
+-q2 -j2 -nogui -z1p -i 2000000 -p poweroff savedisk xps15dev_system
+D2DE19FADE19D815
+```
 
 Let's review it line by line
 
