@@ -37,7 +37,7 @@ The only user intervention is to boot the target computer into Clonezilla bootab
 
 ### Outcome
 
-The resulting backup is created in a folder (folder name is supplied in the `clonezilla-autobackup.conf` file) on the backup partition (partition is supplied in the `backup.conf` file). Backup parameters are also supplied in the `backup.conf` file. Those are passed to Clonezilla engine at runtime.
+The resulting backup is created in a folder (folder name is supplied in the `clonezilla-autobackup.conf` file) on the backup partition (partition is supplied in the `clonezilla-autobackup.conf` file). Backup parameters are also supplied in the `clonezilla-autobackup.conf` file. Those are passed to Clonezilla engine at runtime.
 
 
 ## Bill of Materials
@@ -123,19 +123,22 @@ The autobackup setup of Clonezilla is now complete.
 
 ### Prepare target computer
 
-#### clonezilla-autobackup.configuration file
-clonezilla-autobackup.configuration file tells automatic Clonezilla what kind of backup needs to be performed.
+#### clonezilla-autobackup.conf configuration file
+clonezilla-autobackup.conf configuration file tells automatic Clonezilla what kind of backup needs to be performed.
 It should be localed in the root folder on one of the drives of the target computer:
 
 		/clonezilla-autobackup.conf
 
 A sample backup file is below:
-
+    
+    ```
+    # This is a comment, and is ignored
 		4c4c4544-0054-3610-804a-c7c04f444b33
 		7B0DFCE74B228860
 		-q2 -j2 -nogui -z1p -i 2000000 -p poweroff savedisk xps15dev_system
 		D2DE19FADE19D815
- 
+    ```
+
 Let's review it line by line
 
 ##### Line 1 - hardware ID of the target machine:
@@ -143,6 +146,7 @@ Let's review it line by line
 		00020003-0004-0005-0006-000700080009
 
 This ID could be looked up with this command: `sudo lshw -quiet -class system | grep configuration | grep uuid`
+(Alternative command: `sudo cat /sys/class/dmi/id/product_uuid`)
 
 		$ sudo lshw -quiet -class system | grep configuration | grep uuid
 		configuration: boot=normal chassis=desktop family=Default string sku=Default string uuid=00020003-0004-0005-0006-000700080009
@@ -151,7 +155,6 @@ This ID could be looked up with this command: `sudo lshw -quiet -class system | 
 The easiest way to build `clonezilla-autobackup.conf` file is to boot into interactive Clonezilla, drop into shell instead of starting the backup and look it up there. 
 Clonezilla checks if correct configuration file has been found and ignores the ones with unmatched hardware IDs
 
-Alternative command: `sudo cat /sys/class/dmi/id/product_uuid`
 
 ##### Line 2 - UUID of the partition to store back up file on
 
@@ -160,9 +163,7 @@ Alternative command: `sudo cat /sys/class/dmi/id/product_uuid`
 If the target computer has mulitple disk drives, you can specify on of the partitions on the drives that are not part of the backup.
 Typically this is the partition UUID of the DATA partition of the 2TB backup drive we are building.
 Note that `7B0DFCE74B228860` is UUID of an exFAT partition (windows). Linux ext4 partition UUID will look like `38d9e8cd-deda-4735-ad97-a795665e77fe`
-You can look up partition UUIDs using `sudo blkid` command.
-
-Alternative command: `lsblk -f`
+You can look up partition UUIDs using `sudo blkid` command (Alternative command: `lsblk -f`).
 
 ##### Line 3 - Clonezilla command line arguments
 
