@@ -23,9 +23,9 @@ The only user intervention is to boot the target computer into Clonezilla bootab
 
 - Automatically start Custom backup option
 
-- Inspect local partitions looking for `backup.conf` configuration file in the root folder
+- Inspect local partitions looking for `clonezilla-autobackup.conf` configuration file in the root folder
 
-- Compare hardware ID of the target hardware to the hardware ID in the `backup.conf` (correct backup configuration check)
+- Compare hardware ID of the target hardware to the hardware ID in the `clonezilla-autobackup.conf` (correct backup configuration check)
 
 - Determine backup target partition (backup folder is created in the root folder on that partition)
 
@@ -37,7 +37,7 @@ The only user intervention is to boot the target computer into Clonezilla bootab
 
 ### Outcome
 
-The resulting backup is created in a folder (folder name is supplied in the `backup.conf` file) on the backup partition (partition is supplied in the `backup.conf` file). Backup parameters are also supplied in the `backup.conf` file. Those are passed to Clonezilla engine at runtime.
+The resulting backup is created in a folder (folder name is supplied in the `clonezilla-autobackup.conf` file) on the backup partition (partition is supplied in the `backup.conf` file). Backup parameters are also supplied in the `backup.conf` file. Those are passed to Clonezilla engine at runtime.
 
 
 ## Bill of Materials
@@ -123,11 +123,11 @@ The autobackup setup of Clonezilla is now complete.
 
 ### Prepare target computer
 
-#### Backup configuration file
-Backup configuration file tells automatic Clonezilla what kind of backup needs to be performed.
+#### clonezilla-autobackup.configuration file
+clonezilla-autobackup.configuration file tells automatic Clonezilla what kind of backup needs to be performed.
 It should be localed in the root folder on one of the drives of the target computer:
 
-		/backup.conf
+		/clonezilla-autobackup.conf
 
 A sample backup file is below:
 
@@ -148,9 +148,10 @@ This ID could be looked up with this command: `sudo lshw -quiet -class system | 
 		configuration: boot=normal chassis=desktop family=Default string sku=Default string uuid=00020003-0004-0005-0006-000700080009
 
 
-The easiest way to build `backup.conf` file is to boot into interactive Clonezilla, drop into shell instead of starting the backup and look it up there. 
+The easiest way to build `clonezilla-autobackup.conf` file is to boot into interactive Clonezilla, drop into shell instead of starting the backup and look it up there. 
 Clonezilla checks if correct configuration file has been found and ignores the ones with unmatched hardware IDs
 
+Alternative command: `sudo cat /sys/class/dmi/id/product_uuid`
 
 ##### Line 2 - UUID of the partition to store back up file on
 
@@ -161,6 +162,7 @@ Typically this is the partition UUID of the DATA partition of the 2TB backup dri
 Note that `7B0DFCE74B228860` is UUID of an exFAT partition (windows). Linux ext4 partition UUID will look like `38d9e8cd-deda-4735-ad97-a795665e77fe`
 You can look up partition UUIDs using `sudo blkid` command.
 
+Alternative command: `lsblk -f`
 
 ##### Line 3 - Clonezilla command line arguments
 
@@ -177,7 +179,7 @@ One by one:
 - `savedisk` is command to backup the entire drive (`saveparts` saves individual partitions).
 - `xps15dev_system` is the name of the target folder for the backup.
 
-The esiest way to build this line is to run an interactive Clonezilla session, select all desired parameters and save the resulting command line.
+The easiest way to build this line is to run an interactive Clonezilla session, select all desired parameters and save the resulting command line.
 There is also a command line reference here:  [Man page of ocs-sr](https://clonezilla.org/fine-print-live-doc.php?path=./clonezilla-live/doc/98_ocs_related_command_manpages/01-ocs-sr.doc#google_vignette)
 
 ##### Line 4, 5, 6 and so on

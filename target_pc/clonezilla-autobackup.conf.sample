@@ -1,5 +1,6 @@
 # Backup configuration file
-# DELETE ALL COMMENTS IN THE REAL FILE
+# Comments start with a hash sign, like these lines here
+# Empty lines are ignored
 # should be available in the root of /home/config (mounted from the kernel startup parameters).
 # Format
 # line 1: Machine_UUID
