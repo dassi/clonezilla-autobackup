@@ -35,7 +35,7 @@ foreach $uuid (@uuids) {
     if (-e $configFile ) {
       printf " found backup configuration file\n";
       unless ( open(FILE, "<", $configFile) ) {
-        printf "Error opening backup configration file: $!\n";
+        printf "Error opening backup configuration file: $!\n";
       } else {
         @config = <FILE>;
         close FILE;
@@ -57,7 +57,7 @@ foreach $uuid (@uuids) {
           last;
         } 
         else {
-          printf "Backup uuid=$backupDisk\nDoes not match that of this hardware...";
+          printf "Backup uuid=$backupDisk\ndoes not match that of this hardware...";
         }
       }
     }
@@ -127,12 +127,12 @@ if ($found) {
   }
 } else {
   $failed = $TRUE;
-  $failedMsg = "Backup configration file was not found";
+  $failedMsg = "Backup configuration file was not found";
 }
 
 if ($failed) {
   printf "%s\n", $failedMsg;
-  printf "\nLaunching Interactive Clonezilla in 10 seconds...\n";
+  printf "\nLaunching interactive Clonezilla in 10 seconds...\n";
   system("sleep 10");
   exec("ocs-live-general");
 }
