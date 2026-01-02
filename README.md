@@ -95,28 +95,31 @@ Relevant fdisk output for this disk is:
 
  1. Set timeout to 5 seconds (default is 30):
 
-		set timeout = "5"
+    set timeout = "5"
 
  2. Location this line (usually the first Clonezilla menu item):
 
-		menuentry --hotkey=r "Clonezilla live (VGA 800x600 & To RAM)" --id live-toram {
+    menuentry --hotkey=r "Clonezilla live (VGA 800x600 & To RAM)" --id live-toram {
 
  3. Copy the entire `menuentry` block ahead of the first menublock - the default menu item is 0 (first on the list)
 
-		menuentry --hotkey=r "Clonezilla live (VGA 800x600 & To RAM)" --id live-toram {
-		  search --set -f /live/vmlinuz
-		  $linux_cmd /live/vmlinuz boot=live union=overlay username=user hostname=noble config quiet loglevel=0 noswap edd=on nomodeset enforcing=0 noeject locales= keyboard-layouts= ocs_live_run="ocs-live-general" ocs_live_extra_param="" ocs_live_batch="no" vga=788 toram=live,syslinux,EFI,boot,.disk,utils net.ifnames=0  splash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1
-		  $initrd_cmd /live/initrd.img
-		}
+    menuentry --hotkey=r "Clonezilla live (VGA 800x600 & To RAM)" --id live-toram {
+      search --set -f /live/vmlinuz
+      $linux_cmd /live/vmlinuz boot=live union=overlay username=user hostname=noble config quiet loglevel=0 noswap edd=on nomodeset enforcing=0 noeject locales= keyboard-layouts= ocs_live_run="ocs-live-general" ocs_live_extra_param="" ocs_live_batch="no" vga=788 toram=live,syslinux,EFI,boot,.disk,utils net.ifnames=0  splash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1
+      $initrd_cmd /live/initrd.img
+    }
 
  4. In the new block, modify the menuitem description and the boot command according to the following:
 
-		menuentry --hotkey=r "Clonezilla Autobackup (VGA 800x600 & To RAM)" --id live-autobackup {
-		  search --set -f /live/vmlinuz
-		  $linux_cmd /live/vmlinuz boot=live union=overlay username=user hostname=noble config quiet loglevel=0 noswap edd=on nomodeset enforcing=0 noeject locales=locales=en_EN.UTF-8 keyboard-layouts=NONE ocs_live_run="/lib/live/mount/medium/live/custom-ocs" ocs_live_extra_param="" ocs_live_batch="no" vga=788 toram=live,syslinux,EFI,boot,.disk,utils net.ifnames=0  splash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1
-		  $initrd_cmd /live/initrd.img
-		}
+    menuentry --hotkey=r "Clonezilla Autobackup (VGA 800x600 & To RAM)" --id live-autobackup {
+      search --set -f /live/vmlinuz
+      $linux_cmd /live/vmlinuz boot=live union=overlay username=user hostname=noble config quiet loglevel=0 noswap edd=on nomodeset enforcing=0 noeject locales=locales=en_EN.UTF-8 keyboard-layouts=NONE ocs_live_run="/run/live/medium/live/custom-ocs" ocs_live_extra_param="" ocs_live_batch="no" vga=788 toram=live,syslinux,EFI,boot,.disk,utils net.ifnames=0  splash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1
+      $initrd_cmd /live/initrd.img
+    }
 
+    ... which is essentially this overwritten partial:
+    locales=locales=en_EN.UTF-8 keyboard-layouts=NONE ocs_live_run="/run/live/medium/live/custom-ocs"
+ 
  5. Save `grub.cfg` file
 
 The autobackup setup of Clonezilla is now complete.
@@ -127,7 +130,7 @@ The autobackup setup of Clonezilla is now complete.
 clonezilla-autobackup.conf configuration file tells automatic Clonezilla what kind of backup needs to be performed.
 It should be localed in the root folder on one of the drives of the target computer:
 
-		/clonezilla-autobackup.conf
+    /clonezilla-autobackup.conf
 
 A sample backup file is below:
     
@@ -143,13 +146,13 @@ Let's review it line by line
 
 ##### Line 1 - hardware ID of the target machine:
 
-		00020003-0004-0005-0006-000700080009
+    00020003-0004-0005-0006-000700080009
 
 This ID could be looked up with this command: `sudo lshw -quiet -class system | grep configuration | grep uuid`
 (Alternative command: `sudo cat /sys/class/dmi/id/product_uuid`)
 
-		$ sudo lshw -quiet -class system | grep configuration | grep uuid
-		configuration: boot=normal chassis=desktop family=Default string sku=Default string uuid=00020003-0004-0005-0006-000700080009
+    $ sudo lshw -quiet -class system | grep configuration | grep uuid
+    configuration: boot=normal chassis=desktop family=Default string sku=Default string uuid=00020003-0004-0005-0006-000700080009
 
 
 The easiest way to build `clonezilla-autobackup.conf` file is to boot into interactive Clonezilla, drop into shell instead of starting the backup and look it up there. 
@@ -158,7 +161,7 @@ Clonezilla checks if correct configuration file has been found and ignores the o
 
 ##### Line 2 - UUID of the partition to store back up file on
 
-		7B0DFCE74B228860
+    7B0DFCE74B228860
 
 If the target computer has mulitple disk drives, you can specify on of the partitions on the drives that are not part of the backup.
 Typically this is the partition UUID of the DATA partition of the 2TB backup drive we are building.
@@ -167,7 +170,7 @@ You can look up partition UUIDs using `sudo blkid` command (Alternative command:
 
 ##### Line 3 - Clonezilla command line arguments
 
-		-q2 -j2 -nogui -z1p -i 2000000 -p poweroff savedisk xps15dev_system
+    -q2 -j2 -nogui -z1p -i 2000000 -p poweroff savedisk xps15dev_system
 
 One by one:
 
@@ -185,7 +188,7 @@ There is also a command line reference here:  [Man page of ocs-sr](https://clone
 
 ##### Line 4, 5, 6 and so on
 
-		D2DE19FADE19D815
+    D2DE19FADE19D815
 
 Lines 4 onward list UUID of partitions being backed up. 
 If you are using `savedisk` command - any partion on a disk will make Clonezilla backup the entire disk.
