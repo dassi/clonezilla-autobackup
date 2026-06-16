@@ -97,28 +97,33 @@ Relevant fdisk output for this disk is:
 
     set timeout = "5"
 
- 2. Location this line (usually the first Clonezilla menu item):
+ 2. Locate this line (usually the first Clonezilla menu item):
 
     menuentry --hotkey=r "Clonezilla live (VGA 800x600 & To RAM)" --id live-toram {
 
  3. Copy the entire `menuentry` block ahead of the first menublock - the default menu item is 0 (first on the list)
 
+``
     menuentry --hotkey=r "Clonezilla live (VGA 800x600 & To RAM)" --id live-toram {
       search --set -f /live/vmlinuz
       $linux_cmd /live/vmlinuz boot=live union=overlay username=user hostname=noble config quiet loglevel=0 noswap edd=on nomodeset enforcing=0 noeject locales= keyboard-layouts= ocs_live_run="ocs-live-general" ocs_live_extra_param="" ocs_live_batch="no" vga=788 toram=live,syslinux,EFI,boot,.disk,utils net.ifnames=0  splash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1
       $initrd_cmd /live/initrd.img
     }
+``
+
 
  4. In the new block, modify the menuitem description and the boot command according to the following:
 
+``
     menuentry --hotkey=r "Clonezilla Autobackup (VGA 800x600 & To RAM)" --id live-autobackup {
       search --set -f /live/vmlinuz
-      $linux_cmd /live/vmlinuz boot=live union=overlay username=user hostname=noble config quiet loglevel=0 noswap edd=on nomodeset enforcing=0 noeject locales=locales=en_EN.UTF-8 keyboard-layouts=NONE ocs_live_run="/run/live/medium/live/custom-ocs" ocs_live_extra_param="" ocs_live_batch="no" vga=788 toram=live,syslinux,EFI,boot,.disk,utils net.ifnames=0  splash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1
+      $linux_cmd /live/vmlinuz boot=live union=overlay username=user hostname=noble config quiet loglevel=0 noswap edd=on nomodeset enforcing=0 noeject locales=en_EN.UTF-8 keyboard-layouts=NONE ocs_live_run="/run/live/medium/live/custom-ocs" ocs_live_extra_param="" ocs_live_batch="no" vga=788 toram=live,syslinux,EFI,boot,.disk,utils net.ifnames=0  splash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1
       $initrd_cmd /live/initrd.img
     }
-
-    ... which is essentially this overwritten partial:
-    locales=locales=en_EN.UTF-8 keyboard-layouts=NONE ocs_live_run="/run/live/medium/live/custom-ocs"
+``
+    ... which is essentially this overwritten partials:
+    `--id live-autobackup`
+    `locales=en_EN.UTF-8 keyboard-layouts=NONE ocs_live_run="/run/live/medium/live/custom-ocs"`
  
  5. Save `grub.cfg` file
 

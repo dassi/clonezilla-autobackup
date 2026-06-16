@@ -11,13 +11,19 @@
 # line N: target_uuidN
 #
 # Where
-#	Machine_UUID  is the uuid obtained via 'lshw -quiet | grep configuration | grep uuid
-#	home_partimag_partition_uuid  is UUID of the partition which is going to be mounted to /home/partimag for backup
-#	target_uuidN  is uuid of the partition to be backed up (in case of saveparts), or disk to be backed up (in case of savedisk)
+# Machine_UUID  is the uuid obtained via 'lshw -quiet | grep configuration | grep uuid
+# home_partimag_partition_uuid  is UUID of the partition which is going to be mounted to /home/partimag for backup
+# target_uuidN  is uuid of the partition to be backed up (in case of saveparts), or disk to be backed up (in case of savedisk)
 
-# Server
+# Server PC
 00000000-0000-0000-0000-001FD081B7C9
+
+# Target disk UUID
 38d9e8cd-deda-4735-ad97-a795665e77fe
+
+# clonezilla options
 -q2 -j2 -nogui -z1p -i 2000000 -p poweroff saveparts main_system_partition
+
+# Source disk/partition UUID
 406f5967-271b-4b89-8f37-cdf1ec21a69a
  
